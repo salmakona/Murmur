@@ -1,21 +1,26 @@
 <template>
   <div>
-    <h1>Display the data obtained from API here</h1>
-    {{ data }}
+    <h1>Display Murmur Here ....</h1>
+    <Murmur v-for="murmur in murmur" v-bind:key="murmur.id" v-bind:id="murmur.id" v-bind:murmur="murmur.murmur_content"/>
   </div>
 </template>
 
-<script lang="ts">
+<script>
+import axios from "axios";
+import Murmur from '../components/Murmur';
 export default {
-  async asyncData({ $axios }): Promise<object> {
-    const res = await $axios.$post('http://localhost:3000/api/postTest')
-    console.log(res)
-    return {
-      data: res,
-    }
-  },
-  data() {
-    return {}
-  },
+  
+     data(){
+            return {
+              murmur: []
+            }
+        },
+        async fetch(){
+            this.murmur = await fetch(
+            'http://localhost:3001/murmurs'
+          ).then(res => res.json())
+        }
+      
+
 }
 </script>
