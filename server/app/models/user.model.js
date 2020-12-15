@@ -77,6 +77,29 @@ User.getAlluser = (userId, result) => {
 };
 
 
+User.getNotFollowingUser = (userId, result) => {
+  console.log(userId)
+  sql.query(`SELECT u.id, u.full_name FROM users u where u.id NOT IN (select user_id from followers where follower_user_id = ${userId}) AND u.id <> ${userId}`, (err, res) => {
+    console.log(res);
+
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found User: ", res);
+      result(null, res);
+      return;
+    }
+
+    // not found User with the id
+    result({ kind: "not_found" }, null);
+  });
+};
+
+
 
 
 

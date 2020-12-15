@@ -83,12 +83,9 @@ Murmur.remove = (murmurid, result)=>{
 
 
 Murmur.findMumurByUserId = (userId, result) => {
-
-  // I need another userid 
   
   console.log(userId)
-  sql.query(`SELECT * FROM murmurs WHERE user_id ='1' or user_id ='2' or user_id = '3'
-  `, (err, res) => {
+  sql.query(`SELECT * FROM murmurs WHERE user_id = ${userId}`, (err, res) => {
     console.log(res)
     if (err) {
       console.log("error: ", err);
@@ -106,5 +103,58 @@ Murmur.findMumurByUserId = (userId, result) => {
     result({ kind: "not_found" }, null);
   });
 };
+
+
+Murmur.getTimelineMurmurs = (userId,page, result) => {  
+  console.log(userId)
+  var page = (page-1)*10;
+  sql.query(`SELECT u.full_name, u.user_name, m.*,
+   (SELECT count(*) from likes WHERE likes.mumur_id = m.id) as like_count FROM users u,
+    murmurs m where u.id = m.user_id and u.id IN (SELECT id FROM users WHERE id IN 
+    (select user_id from followers WHERE follower_user_id = ${userId}) or id = ${userId}) 
+    order by m.id desc LIMIT ${page},10`,
+     (err, res) => {
+    console.log(res)
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found Murmur: ", res);
+      result(null, res);
+      return;
+    }
+
+    // not found Murmur with the id
+    result({ kind: "not_found" }, null);
+  });
+};
+
+Murmur.findByMurmurId = (murmurId, result) => { 
+  console.log(murmurId+"Hello")
+    sql.query(`SELECT u.full_name, u.user_name, m.*, (SELECT count(*) from likes WHERE likes.mumur_id = m.id) as like_count FROM users u, murmurs m where u.id = m.user_id and m.id=${murmurId}`,
+     (err, res) => {
+    console.log(res)
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      console.log("found Murmur: ", res);
+      result(null, res);
+      return;
+    }
+
+    // not found Murmur with the id
+    result({ kind: "not_found" }, null);
+  });
+
+}
+
+
 
 module.exports = Murmur;
