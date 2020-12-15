@@ -2,22 +2,24 @@ const sql = require("./db.js");
 
 // constructor
 const Follower = function(follower) {
-  this.user_id = follower.user_id;
   this.follower_user_id = follower.follower_user_id;
+  this.user_id = follower.user_id;
 };
 
 Follower.create = (newFollower, result) => {
 
-    sql.query(`SELECT * FROM followers WHERE user_id = ${newFollower.user_id} and follower_user_id= ${newFollower.follower_user_id}`, (err, res) => {
+  console.log(newFollower);
+
+    sql.query(`SELECT * FROM followers WHERE follower_user_id = ${newFollower.follower_user_id} and user_id= ${newFollower.user_id}`, (err, res) => {
         if (err) {
             console.log("error:", err);
             result(err, null);
             return;
           }
           if (res.length) {
-            console.log("found followers by ID: ", res);
-
-            sql.query(`DELETE FROM followers WHERE user_id =  ${newFollower.user_id} and follower_user_id = ${newFollower.follower_user_id}`, (err, res) => {
+            //found followers by ID:  [ RowDataPacket { id: 35, user_id: 5, follower_user_id: 1 } ]
+            console.log("found followers by ID: ", res[0].id);
+             sql.query(`DELETE FROM followers WHERE id = ${res[0].id}`, (err, res) => {
                 if (err) {
                   console.log("error: ", err);
                   result(null, err);
@@ -30,9 +32,10 @@ Follower.create = (newFollower, result) => {
                 }{
                     console.log("Deletec followers")
                 }
-                result(null, { kind: "deleted follower id :"+ newFollower.follower_user_id });
+                result(null, { kind: "deleted follower id :"+ newFollower.user_id });
               });
-          }else{
+          }
+          else{
                 console.log(" Insert Follower")
                 sql.query("INSERT INTO followers SET ?", newFollower, (err, res) => {
                 if (err) {
@@ -104,7 +107,28 @@ Follower.create = (newFollower, result) => {
     
     //   };
 
-  Follower.count= (user_id,result)=>{
+  Follower.followerCount= (user_id,result)=>{
+    sql.query(`SELECT COUNT(*) as count FROM followers WHERE follower_user_id = ${user_id}`, (err, res) => {
+        console.log(res);
+        if (err) {
+            console.log("error:", err);
+            result(err, null);
+            return;
+          }
+          if (res.length) {
+            console.log("found followers: ", res);
+            result(null, res[0]);
+            return;
+          }
+          // not found Murmur with the id
+          result({ kind: "not_found" }, null);
+      });
+
+  };
+
+
+
+  Follower.followingCount= (user_id,result)=>{
     sql.query(`SELECT COUNT(*) as count FROM followers WHERE user_id = ${user_id}`, (err, res) => {
         console.log(res);
         if (err) {
@@ -113,7 +137,7 @@ Follower.create = (newFollower, result) => {
             return;
           }
           if (res.length) {
-            console.log("found followers: ", res);
+            console.log("found following: ", res);
             result(null, res[0]);
             return;
           }
@@ -123,26 +147,29 @@ Follower.create = (newFollower, result) => {
 
   };
 
+  Follower.getFollowing = (userId,result) =>{
 
+    console.log(userId)
+    sql.query(`SELECT * FROM users WHERE id IN (select user_id from followers where follower_user_id = ${userId})`, (err, res) => {
 
-  Follower.followedBYCount= (follower_user_id,result)=>{
-    sql.query(`SELECT COUNT(*) as count FROM followers WHERE follower_user_id = ${follower_user_id}`, (err, res) => {
-        console.log(res);
-        if (err) {
-            console.log("error:", err);
-            result(err, null);
-            return;
-          }
-          if (res.length) {
-            console.log("found followers: ", res);
-            result(null, res[0]);
-            return;
-          }
-          // not found Murmur with the id
-          result({ kind: "not_found" }, null);
-      });
+      console.log(res)
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
 
-  };
+      if (res.length) {
+        console.log("found followers: ", res);
+        result(null, res);
+        return;
+      }
+
+      // not found Murmur with the id
+      result({ kind: "not_found" }, null);
+    });
+
+  }
 
 
 

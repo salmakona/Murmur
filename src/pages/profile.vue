@@ -35,7 +35,12 @@
         <div class="card">
           <ul class="list-group list-group-flush" v-for="murmur in murmur" v-bind:key="murmur.id" v-bind:id="murmur.id">
             {{murmur.full_name}} -@{{murmur.user_name}} 
-            <li class="list-group-item">{{murmur.murmur_content}}</li>
+            <li class="list-group-item">
+                            <nuxt-link :to="'murmur-detail/' + murmur.id">
+
+              {{murmur.murmur_content.substring(0,100)+".."}}
+                            </nuxt-link>
+            </li>
             <h6><span class="badge badge-dark" @click="likePost(murmur.id)">Like</span> <span class="badge badge-secondary">{{murmur.like_count}}</span></h6>
             <h6><span class="badge badge-dark" @click="removePost(murmur.id)"> Delete</span> </h6>
           </ul>
@@ -102,7 +107,7 @@ export default {
         }
      
         try{
-            const resfollowedBYCount = await axios.get('http://localhost:3001/api/followedBYCount/'+this.userId);
+            const resfollowedBYCount = await axios.get('http://localhost:3001/api/followingCount/'+this.userId);
             this.followingcount = resfollowedBYCount.data.count
 
         }catch(err){

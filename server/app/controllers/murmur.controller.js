@@ -168,3 +168,55 @@ exports.findMumurByUserId = (req, res) => {
   });
   
 };
+
+exports.getTimelineMurmurs = (req,res) => {
+
+
+  console.log(req.params.userId);
+   console.log(req.params.page);
+  //console.log(req.query.page);
+
+  console.log("Timeline user ID");
+
+  Murmur.getTimelineMurmurs(req.params.userId,req.params.page, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found murmur with id ${req.params.userId}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving murmur with id " + req.params.userId
+        });
+      }
+    } else res.send(data);
+  });
+
+}
+
+
+exports.findByMurmurId = (req,res) =>{
+
+  console.log(req.params.murmurId);
+
+  console.log("Find by Murmur ID");
+
+  Murmur.findByMurmurId(req.params.murmurId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found murmur with id ${req.params.murmurId}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving murmur with id " + req.params.murmurId
+        });
+      }
+    } else res.send(data);
+  });
+
+}
+
+
+
+

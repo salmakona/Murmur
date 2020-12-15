@@ -74,6 +74,35 @@ exports.getAlluser = (req, res) => {
 }
 
 
+exports.getNotFollowingUser = (req, res) => {
+
+    console.log(req.params.userId);
+
+    console.log("Find by not user ID");
+  
+
+  User.getNotFollowingUser(req.params.userId, (err, data) => {
+    
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          //message: `Not found getNotFollowingUser user with id ${req.params.userId}.`
+          message: `user not exits....`,
+          code:`404`
+        });
+        //res.send(err)
+      } else {
+        res.status(500).send({
+          message: "Error retrieving getNotFollowingUser user with id " + req.params.userId
+        });
+      }
+
+    } 
+    else res.send(data);
+  });
+
+}
+
 
 
 

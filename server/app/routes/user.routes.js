@@ -5,5 +5,8 @@ module.exports = app => {
     app.get("/api/all/:userId", user.getUserMurmurById);
 	app.get("/api/user/all/:userId", user.getAlluser);
 
+	// not following 
+	app.get("/api/user/notfollowing/:userId", user.getNotFollowingUser);
+
   
   };

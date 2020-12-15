@@ -4,7 +4,7 @@ exports.create = (req, res) => {
 
     console.log("HEllo Hello from post")
 
-    console.log(req.body)
+    //console.log(req.body)
 
     // Validate request
     if (!req.body) {
@@ -15,8 +15,8 @@ exports.create = (req, res) => {
 
     // Create a murmur
     const follower = new Follower({
-        user_id: req.body.user_id,
-        follower_user_id: req.body.follower_user_id
+        user_id:req.body.follower_user_id, 
+        follower_user_id:req.body.user_id
     });
     console.log("follower1")
     // Save follower in the database
@@ -31,7 +31,7 @@ exports.create = (req, res) => {
         });
         else 
         res.send(data);
-});
+    });
 
   
 };
@@ -42,7 +42,7 @@ exports.followerCount = (req, res) => {
 
     console.log("Find by user ID");
   
-    Follower.count(req.params.userId, (err, data) => {
+    Follower.followerCount(req.params.userId, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
@@ -59,21 +59,41 @@ exports.followerCount = (req, res) => {
 }
 
 
-exports.followedBYCount = (req, res) => {
+exports.followingCount = (req, res) => {
 
-    console.log(req.params.follower_user_id);
+    console.log(req.params.userId);
 
     console.log("Find by user ID");
   
-    Follower.count(req.params.follower_user_id, (err, data) => {
+    Follower.followingCount(req.params.userId, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found followedby with id ${req.params.follower_user_id}.`
+            message: `Not found following with id ${req.params.userId}.`
           });
         } else {
           res.status(500).send({
-            message: "Error retrieving followedby with id " + req.params.follower_user_id
+            message: "Error retrieving following with id " + req.params.userId
+          });
+        }
+      } else res.send(data);
+    });
+
+}
+
+exports.getFollowing = (req, res) => {
+  console.log(req.params.userId);
+
+    console.log("Find by user ID");
+    Follower.getFollowing(req.params.userId, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found followedby with id ${req.params.userId}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving followedby with id " + req.params.userId
           });
         }
       } else res.send(data);
