@@ -2,20 +2,20 @@ module.exports = app => {
   const murmurs = require("../controllers/murmur.controller.js");
 
   // Create a new murmurs
-  app.post("/murmur", murmurs.create);
+  app.post("/api/murmur", murmurs.create);
 
   // Retrieve all murmurs
-  app.get("/murmurs", murmurs.findAll);
+  app.get("/api/murmurs", murmurs.findAll);
 
   // Retrieve a single murmurs with userId
-  app.get("/murmurs/:userId", murmurs.findByUserId);
+  app.get("/api/murmurs/:userId", murmurs.findByUserId);
 
    // remove a single murmurs with Id
-  app.delete("/murmurs/:murmurId", murmurs.delete);
+  app.delete("/api/murmurs/:murmurId", murmurs.delete);
 
-  app.post("/murmurs/like", murmurs.like);
+  app.post("/api/murmurs/like", murmurs.like);
 
   // get murmur for timeline
-  app.get("/murmurs/:userId", murmurs.findMumurByUserId);
+  app.get("/api/murmurs/:userId", murmurs.findMumurByUserId);
 
 };

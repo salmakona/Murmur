@@ -4,7 +4,6 @@ const sql = require("./db.js");
 const Murmur = function(murmur) {
   this.user_id = murmur.user_id;
   this.murmur_content = murmur.murmur_content;
-  this.like_count = murmur.like_count;
   this.creation_date = murmur.creation_date;
 };
 

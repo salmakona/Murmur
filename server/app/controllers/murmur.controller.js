@@ -18,7 +18,6 @@ exports.create = (req, res) => {
     const murmur = new Murmur({
       user_id: req.body.user_id,
       murmur_content: req.body.murmur_content,
-      like_count: req.body.like_count,
       creation_date:req.body.creation_date
 
     });

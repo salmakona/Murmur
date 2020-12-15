@@ -9,6 +9,7 @@ const MurmurLike = function(murmurLike) {
 
 
 MurmurLike.create = (newLike, result) => {
+  console.log(newLike)
 
     sql.query(`SELECT * FROM likes WHERE user_id = ${newLike.user_id} and mumur_id= ${newLike.mumur_id}`, (err, res) => {
         if (err) {
