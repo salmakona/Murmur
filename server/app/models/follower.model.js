@@ -105,7 +105,7 @@ Follower.create = (newFollower, result) => {
     //   };
 
   Follower.count= (user_id,result)=>{
-    sql.query(`SELECT COUNT(*) FROM followers WHERE user_id = ${user_id}`, (err, res) => {
+    sql.query(`SELECT COUNT(*) as count FROM followers WHERE user_id = ${user_id}`, (err, res) => {
         console.log(res);
         if (err) {
             console.log("error:", err);
@@ -126,7 +126,7 @@ Follower.create = (newFollower, result) => {
 
 
   Follower.followedBYCount= (follower_user_id,result)=>{
-    sql.query(`SELECT COUNT(*) FROM followers WHERE follower_user_id = ${follower_user_id}`, (err, res) => {
+    sql.query(`SELECT COUNT(*) as count FROM followers WHERE follower_user_id = ${follower_user_id}`, (err, res) => {
         console.log(res);
         if (err) {
             console.log("error:", err);
