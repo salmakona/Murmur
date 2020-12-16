@@ -1,13 +1,11 @@
 <template>
-<div>
- <div class="container">
+  <div>
+    <div class="container">
       <div class="row">
         <div class="col-md-3">
           <div class="my-3 p-3 bg-white rounded box-shadow">
             <h6 class="border-bottom border-gray pb-2 mb-0">Suggestions</h6>
             <div class="media text-muted pt-3" v-for="list in list" v-bind:key="list.id" v-bind:id="list.id">
-
-
               <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                 <div class="d-flex justify-content-between align-items-center w-100">
                   <nuxt-link :to="'/user-profile/' + list.id">
@@ -19,8 +17,7 @@
                 <strong v-if="error_follower">{{this.errorMessage_follwer}}</strong>
               </div>
             </div>
-          </div> 
-
+          </div>
         </div>
         <div class="col-md-6 border-right border-left">
           <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
@@ -34,20 +31,19 @@
             </div>
           </div>
           <div class="my-3 p-3 bg-white rounded box-shadow">
-            <h6 class="border-bottom border-gray pb-2 mb-0">Recent Murmur</h6>
             <div class="media text-muted pt-3">
               <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                  {{murmur.murmur_content}}.
+                {{murmur.murmur_content}}.
               </p>
               <h6><span class="badge badge-dark" @click="likePost(murmur.id)">Like</span> <span
                   class="badge badge-secondary">{{murmur.like_count}}</span></h6>
             </div>
-    
+
           </div>
         </div>
         <div class="col-md-3">
 
-           <div class="my-3 p-3 bg-white rounded box-shadow">
+          <div class="my-3 p-3 bg-white rounded box-shadow">
             <h6 class="border-bottom border-gray pb-2 mb-0">Following</h6>
             <div class="media text-muted pt-3" v-for="following in following" v-bind:key="following.id"
               v-bind:id="following.id">
@@ -83,7 +79,7 @@
 
 
             </div>
-          </div>  
+          </div>
         </div>
       </div>
     </div>
@@ -97,35 +93,34 @@
     data() {
       return {
         murmur: [],
-        userId:'',
+        userId: '',
         user_name: '',
         full_name: '',
         about_me: '',
         join_date: '',
-         followersCount: [],
+        followersCount: [],
         followingcount: [],
-         user_followers: [],
-          following: [],
-           list: []
+        user_followers: [],
+        following: [],
+        list: []
       }
     },
     mounted() {
       console.log(this.$route.params.id);
-
     },
     async created() {
 
       try {
         const resAll = await axios.get('http://localhost:3001/api/murmurs/murmurId/' + this.$route.params.id);
         this.murmur = resAll.data[0]
-        this.userId=this.murmur.user_id
+        this.userId = this.murmur.user_id
 
       } catch (err) {}
       try {
         const resuser = await axios.get('http://localhost:3001/api/user/' + this.userId)
 
         this.user = resuser.data[0]
-        console.log(this.user)
+        
         this.user_name = this.user.user_name,
           this.full_name = this.user.full_name,
           this.about_me = this.user.about_me,
@@ -134,7 +129,7 @@
       } catch (err) {
 
       }
-         try {
+      try {
 
         const resfollowerCount = await axios.get('http://localhost:3001/api/followerCount/' + this.userId);
         this.followersCount = resfollowerCount.data.count
@@ -151,7 +146,7 @@
 
       }
 
-       try {
+      try {
 
         const userFollowers = await axios.get('http://localhost:3001/api/follower/' + this.userId);
         this.user_followers = userFollowers.data;
@@ -159,7 +154,7 @@
 
       }
 
-       //getFollowing users
+      //getFollowing users
       try {
         const resFollowing = await axios.get('http://localhost:3001/api/following/' + this.userId);
         this.following = resFollowing.data;
@@ -177,7 +172,7 @@
 
         const list = await axios.get('http://localhost:3001/api/user/notfollowing/' + this.userId)
         this.list = list.data;
-        console.log(this.list)
+       
         this.error_follower = false
         this.errorMessage_follwer = "";
 
@@ -185,41 +180,41 @@
         this.error_follower = true
         this.errorMessage_follwer = "user not exits...";
         this.list = [];
-        console.log(err)
+        
       }
 
 
     },
 
-     methods: {
+    methods: {
 
       async likePost(mumur_id) {
-        console.log("mumur_id: " + mumur_id + "user_id: " + this.userId)
+        
         const res = await axios.post('http://localhost:3001/api/murmurs/like', {
             user_id: this.userId,
             mumur_id: mumur_id
           })
           .then((response) => {
-            console.log(response);
+           
             this.refresh()
           });
       },
       async refresh() {
-    
-      try {
 
-       const resAll = await axios.get('http://localhost:3001/api/murmurs/murmurId/' + this.$route.params.id);
-        this.murmur = resAll.data[0]
+        try {
 
-      } catch (err) {}
+          const resAll = await axios.get('http://localhost:3001/api/murmurs/murmurId/' + this.$route.params.id);
+          this.murmur = resAll.data[0]
+
+        } catch (err) {}
       },
-       async follow(followId) {
-        console.log("follower_user_id: " + followId + "user_id: " + this.userId)
+      async follow(followId) {
+       
         const res = await axios.post('http://localhost:3001/api/follower', {
           user_id: this.userId,
           follower_user_id: followId
         }).then((response) => {
-          console.log(response);
+          
           this.followerReload();
           this.followingReload();
           this.refresh();
@@ -227,14 +222,13 @@
           this.reloadFollowingCount()
         });
 
-      },     async followerReload() {
+      },
+      async followerReload() {
         // refload following list
         try {
 
           const list = await axios.get('http://localhost:3001/api/user/notfollowing/' + this.userId);
           this.list = list.data;
-
-          console.log(this.list);
           this.error_follower = false
           this.errorMessage_follwer = "";
 
@@ -267,7 +261,6 @@
         try {
 
           const resFollowerCount = await axios.get('http://localhost:3001/api/followerCount/' + this.userId);
-          console.log("Folowed count")
           this.followersCount = resFollowerCount.data.count
 
         } catch (err) {
@@ -277,8 +270,6 @@
       async reloadFollowingCount() {
         try {
           const resFollowedBYCount = await axios.get('http://localhost:3001/api/followingCount/' + this.userId);
-          console.log("Followingcount" + resFollowedBYCount.data)
-
           this.followingcount = resFollowedBYCount.data.count
 
         } catch (err) {

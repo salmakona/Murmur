@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to  application." });
 });
 
+// routes 
 require("./app/routes/murmur.routes")(app);
 require("./app/routes/follower.routes")(app);
 require("./app/routes/user.routes")(app);

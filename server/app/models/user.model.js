@@ -33,7 +33,7 @@ User.getUserByID = (userId, result) => {
 
 User.getUserMurmurById = (userId,page, result) => {
    var page = (page-1)*10;
-  console.log(userId)
+   
   sql.query(`SELECT u.full_name, u.user_name, 
     m.*, (SELECT count(*) from likes where likes.mumur_id = m.id) 
     as like_count FROM users u, murmurs m where u.id = m.user_id and u.id = ${userId} 

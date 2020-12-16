@@ -2,7 +2,9 @@ module.exports = app => {
     const follower = require("../controllers/follower.controller.js");
     // Create a new follower
     app.post("/api/follower", follower.create);
+    // followers count by user id
     app.get("/api/followerCount/:userId", follower.followerCount);
+    // following count by user id 
     app.get("/api/followingCount/:userId", follower.followingCount);
 
 
