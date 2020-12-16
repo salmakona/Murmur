@@ -2,8 +2,6 @@ const Follower = require("../models/follower.model.js");
 
 exports.create = (req, res) => {
 
-    console.log("HEllo Hello from post")
-
     //console.log(req.body)
 
     // Validate request
@@ -38,9 +36,7 @@ exports.create = (req, res) => {
 
 exports.followerCount = (req, res) => {
 
-    console.log(req.params.userId);
-
-    console.log("Find by user ID");
+  
   
     Follower.followerCount(req.params.userId, (err, data) => {
       if (err) {
@@ -82,7 +78,7 @@ exports.followingCount = (req, res) => {
 }
 
 exports.getFollowing = (req, res) => {
-  console.log(req.params.userId);
+  
 
     console.log("Find by user ID");
     Follower.getFollowing(req.params.userId, (err, data) => {
@@ -102,9 +98,7 @@ exports.getFollowing = (req, res) => {
 }
 
 exports.getFollower = (req, res) => {
-  console.log(req.params.userId);
-
-    console.log("Find Followers by user ID");
+ 
     
     Follower.getFollower(req.params.userId, (err, data) => {
       if (err) {

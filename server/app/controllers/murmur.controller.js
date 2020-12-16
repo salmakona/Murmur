@@ -3,9 +3,7 @@ const MurmurLike = require("../models/murmurlike.model.js");
 
 exports.create = (req, res) => {
 
-    console.log("HEllo Hello from post")
-
-    console.log(req.body)
+    //console.log(req.body)
 
     // Validate request
     if (!req.body) {
@@ -59,9 +57,9 @@ exports.findAll = (req, res) => {
 // Retrieve all murmurs from the database.
 exports.findByUserId = (req, res) => {
 
-  console.log(req.params.userId);
+  //console.log(req.params.userId);
 
-  console.log("Find by user ID");
+  //console.log("Find by user ID");
 
   Murmur.findByUserId(req.params.userId, (err, data) => {
     if (err) {
@@ -149,10 +147,6 @@ exports.like = (req,res) =>{
 
 exports.findMumurByUserId = (req, res) => {
 
-  console.log(req.params.userId);
-
-  console.log("Find by user ID");
-
   Murmur.findByUserId(req.params.userId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
@@ -172,11 +166,7 @@ exports.findMumurByUserId = (req, res) => {
 exports.getTimelineMurmurs = (req,res) => {
 
 
-  console.log(req.params.userId);
-   console.log(req.params.page);
-  //console.log(req.query.page);
-
-  console.log("Timeline user ID");
+  //console.log("Timeline user ID");
 
   Murmur.getTimelineMurmurs(req.params.userId,req.params.page, (err, data) => {
     if (err) {

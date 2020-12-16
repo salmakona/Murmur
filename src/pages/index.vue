@@ -161,7 +161,7 @@
 
         const list = await axios.get('http://localhost:3001/api/user/notfollowing/' + this.userId)
         this.list = list.data;
-        console.log(this.list)
+        
         this.error_follower = false
         this.errorMessage_follwer = "";
 
@@ -169,7 +169,7 @@
         this.error_follower = true
         this.errorMessage_follwer = "user not exits...";
         this.list = [];
-        console.log(err)
+       
       }
 
       // murmurs for timeline 
@@ -184,7 +184,7 @@
         const resUser = await axios.get('http://localhost:3001/api/user/' + this.userId)
 
         this.user = resUser.data[0]
-        console.log(this.user)
+      
         this.user_name = this.user.user_name,
           this.full_name = this.user.full_name,
           this.about_me = this.user.about_me,
@@ -197,7 +197,7 @@
       try {
 
         const resFollowerCount = await axios.get('http://localhost:3001/api/followerCount/' + this.userId);
-        console.log("Folowed count")
+        
         this.followersCount = resFollowerCount.data.count
 
       } catch (err) {
@@ -206,7 +206,7 @@
       // following  count 
       try {
         const resFollowedBYCount = await axios.get('http://localhost:3001/api/followingCount/' + this.userId);
-        console.log("Followingcount" + resFollowedBYCount.data)
+        
 
         this.followingcount = resFollowedBYCount.data.count
 
@@ -240,28 +240,28 @@
     },
     methods: {
       callEvent() {
-        console.log("Event called");
+     
         this.error = false
 
       },
       async likePost(mumur_id, userId) {
-        console.log("mumur_id: " + mumur_id + "user_id: " + this.userId)
+        
         const res = await axios.post('http://localhost:3001/api/murmurs/like', {
             user_id: this.userId,
             mumur_id: mumur_id
           })
           .then((response) => {
-            console.log(response);
+            
             this.refresh()
           });
       },
       async follow(followId) {
-        console.log("follower_user_id: " + followId + "user_id: " + this.userId)
+        
         const res = await axios.post('http://localhost:3001/api/follower', {
           user_id: this.userId,
           follower_user_id: followId
         }).then((response) => {
-          console.log(response);
+         
           this.followerReload();
           this.followingReload();
           this.refresh();
@@ -273,7 +273,7 @@
       async getInfo(userId) {
         const resUserinfo = await axios.get('http://localhost:3001/api/user/' + this.userId)
         this.user = resUserinfo.data[0]
-        // console.log(this.user)
+      
         this.user_name = this.user.user_name,
           this.full_name = this.user.full_name,
           this.about_me = this.user.about_me,
@@ -286,17 +286,16 @@
             Accept: "application/json"
           }
         };
-        console.log("Clicked");
-        console.log(this.tweet)
+
         const body = {
           murmur_content: this.tweet,
           user_id: "1",
           like_count: 0,
           creation_date: "2020-12-14 1.5.30"
         }
-        console.log(body);
+       
         if (this.tweet == '') {
-          console.log("tweet is missing !!!");
+          
           this.error = true;
           this.errors_msg = "Murmur is missing"
         } else {
@@ -307,7 +306,7 @@
               creation_date: "2020-12-14 1.5.30"
             })
             .then((response) => {
-              console.log(response);
+              
               this.resetInput()
               this.refresh()
             });;
@@ -331,8 +330,6 @@
 
           const list = await axios.get('http://localhost:3001/api/user/notfollowing/' + this.userId);
           this.list = list.data;
-
-          console.log(this.list);
           this.error_follower = false
           this.errorMessage_follwer = "";
 
@@ -365,13 +362,13 @@
         //pagination next 
         try {
           this.page += 1;
-          console.log("nextPage" + this.page);
+         
           const resAll = await axios.get('http://localhost:3001/api/murmurs/timeline/' + this.userId + '/' + this
             .page);
           this.timeline_murmur = resAll.data;
-          console.log(this.timeline_murmur.count);
+          
         } catch (err) {
-          console.log(err)
+        
           this.next_status_disable = 'true'
           this.page = 1;
         }
@@ -380,7 +377,7 @@
         //pagination pri 
         if (this.page > 1) {
           this.page -= 1;
-          console.log("previousPage" + this.page)
+         
         }
         if (this.page == 1) {
           this.page = 1;
@@ -393,7 +390,7 @@
             .page);
           this.timeline_murmur = resAll.data
         } catch (err) {
-          console.log(err)
+         
           this.next_status_disable = ''
           this.disable = false
         }
@@ -407,7 +404,7 @@
           try {
 
         const resFollowerCount = await axios.get('http://localhost:3001/api/followerCount/' + this.userId);
-        console.log("Folowed count")
+        
         this.followersCount = resFollowerCount.data.count
 
       } catch (err) {
@@ -417,7 +414,7 @@
       async reloadFollowingCount(){
         try {
           const resFollowedBYCount = await axios.get('http://localhost:3001/api/followingCount/' + this.userId);
-          console.log("Followingcount" + resFollowedBYCount.data)
+         
 
           this.followingcount = resFollowedBYCount.data.count
 
