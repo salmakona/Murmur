@@ -25,7 +25,8 @@
             <div class="lh-100">
               <h6 class="mb-0 text-white lh-100">{{full_name}}</h6>
               <small class="u-font">@{{user_name}}</small><br>
-              <small class="u-font">{{about_me}}</small><br />
+              <small class="u-font">{{about_me}}</small><br>
+              <small>Joined: {{join_date}}</small><br>
               <small>Following <span class="badge badge-secondary">{{this.followersCount}}</span></small>
               <small> Followers <span class="badge badge-secondary">{{this.followingcount}}</span></small>
             </div>
@@ -34,9 +35,13 @@
             <div class="media text-muted pt-3">
               <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                 {{murmur.murmur_content}}.
+                 <br>
+             <small class="text-primary">Posted: {{new Date(murmur.creation_date).toLocaleDateString("en-US")}}</small> 
+
+              <span class="badge badge-dark" @click="likePost(murmur.id)">Like</span> <span
+                  class="badge badge-secondary">{{murmur.like_count}}</span>
               </p>
-              <h6><span class="badge badge-dark" @click="likePost(murmur.id)">Like</span> <span
-                  class="badge badge-secondary">{{murmur.like_count}}</span></h6>
+             
             </div>
 
           </div>
@@ -124,7 +129,7 @@
         this.user_name = this.user.user_name,
           this.full_name = this.user.full_name,
           this.about_me = this.user.about_me,
-          this.join_date = this.user.join_date
+           this.join_date = new Date(this.user.join_date).toLocaleDateString("en-US")
 
       } catch (err) {
 

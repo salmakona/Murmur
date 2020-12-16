@@ -1,7 +1,7 @@
 <template>
 
   <header class="header">
-    <h1 class="title">Murmur</h1>
+    <nuxt-link to="/"> <h1 class="title">Murmur</h1></nuxt-link>
     <ul>
       <li>
         <nuxt-link to="/">Home</nuxt-link>
