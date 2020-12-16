@@ -19,7 +19,6 @@ module.exports = app => {
   app.get("/api/murmurs/:userId", murmurs.findMumurByUserId);
 
   //get murmurs for timeline page
-///api/murmurs/timeline/1?page=1
 
   app.get("/api/murmurs/timeline/:userId/:page", murmurs.getTimelineMurmurs);
 

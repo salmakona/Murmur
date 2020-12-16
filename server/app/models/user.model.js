@@ -31,11 +31,13 @@ User.getUserByID = (userId, result) => {
 };
 
 
-
-
-User.getUserMurmurById = (userId, result) => {
+User.getUserMurmurById = (userId,page, result) => {
+   var page = (page-1)*10;
   console.log(userId)
-  sql.query(`SELECT u.full_name, u.user_name, m.*, (SELECT count(*) from likes where likes.mumur_id = m.id) as like_count FROM users u, murmurs m where u.id = m.user_id and u.id = ${userId} order by m.id desc`, (err, res) => {
+  sql.query(`SELECT u.full_name, u.user_name, 
+    m.*, (SELECT count(*) from likes where likes.mumur_id = m.id) 
+    as like_count FROM users u, murmurs m where u.id = m.user_id and u.id = ${userId} 
+    order by m.id desc LIMIT ${page},10`, (err, res) => {
     console.log(res)
     if (err) {
       console.log("error: ", err);
@@ -79,7 +81,7 @@ User.getAlluser = (userId, result) => {
 
 User.getNotFollowingUser = (userId, result) => {
   console.log(userId)
-  sql.query(`SELECT u.id, u.full_name FROM users u where u.id NOT IN (select user_id from followers where follower_user_id = ${userId}) AND u.id <> ${userId}`, (err, res) => {
+  sql.query(`SELECT u.id,u.user_name, u.full_name FROM users u where u.id NOT IN (select user_id from followers where follower_user_id = ${userId}) AND u.id <> ${userId}`, (err, res) => {
     console.log(res);
 
     if (err) {

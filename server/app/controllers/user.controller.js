@@ -32,7 +32,7 @@ exports.getUserMurmurById = (req, res) => {
     console.log("Find by user ID");
   
 
-  User.getUserMurmurById(req.params.userId, (err, data) => {
+  User.getUserMurmurById(req.params.userId,req.params.page, (err, data) => {
     
     if (err) {
       if (err.kind === "not_found") {

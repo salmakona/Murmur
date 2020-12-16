@@ -6,8 +6,11 @@ module.exports = app => {
     app.get("/api/followingCount/:userId", follower.followingCount);
 
 
-    // get followe
+    // get following 
 	app.get("/api/following/:userId", follower.getFollowing);
+
+	  // get followers for user 
+	app.get("/api/follower/:userId", follower.getFollower);
 
 
   
