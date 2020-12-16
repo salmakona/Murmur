@@ -29,7 +29,8 @@
             <div class="lh-100">
               <h6 class="mb-0 text-white lh-100">{{full_name}}</h6>
               <small class="u-font">@{{user_name}}</small><br>
-              <small class="u-font">{{about_me}}</small><br />
+              <small class="u-font">{{about_me}}</small><br>
+              <small>Joined: {{join_date}}</small><br>
               <small>Following <span class="badge badge-secondary">{{this.followersCount}}</span></small>
               <small> Followers <span class="badge badge-secondary">{{this.followingcount}}</span></small>
             </div>
@@ -46,12 +47,15 @@
                 <nuxt-link :to="'murmur-detail/' + murmur.id">
                   {{murmur.murmur_content.substring(0,100)+".."}}.
                 </nuxt-link>
+                 <br>
+                <small class="text-primary"> Posted: {{new Date(murmur.creation_date).toLocaleDateString("en-US")}}</small> 
+                  <span class="badge badge-dark" @click="likePost(murmur.id)">Like</span> 
+                   <span class="badge badge-secondary">{{murmur.like_count}}</span>
+                 <span class="badge badge-danger" @click="removePost(murmur.id)"> Delete</span>
                
               </p>
             <small class="d-block text-right mt-3">
-                  <span class="badge badge-dark" @click="likePost(murmur.id)">Like</span> 
-                   <span class="badge badge-secondary">{{murmur.like_count}}</span>
-                 <span class="badge badge-dark" @click="removePost(murmur.id)"> Delete</span>
+                
             </small>
             </div>
             <small class="d-block text-center mt-3" v-if="murmur.length>0">
@@ -157,7 +161,6 @@
       }
 
       try {
-        //http://localhost:3001/api/murmurs/profile/1/1
         const resall = await axios.get('http://localhost:3001/api/murmurs/profile/' + this.userId + '/' + this.page);
         this.murmur = resall.data
 
@@ -171,8 +174,7 @@
         this.user_name = this.user.user_name,
           this.full_name = this.user.full_name,
           this.about_me = this.user.about_me,
-          this.join_date = this.user.join_date
-
+           this.join_date = new Date(this.user.join_date).toLocaleDateString("en-US")
       } catch (err) {
 
       }

@@ -6,8 +6,6 @@
           <div class="my-3 p-3 bg-white rounded box-shadow">
             <h6 class="border-bottom border-gray pb-2 mb-0">Suggestions</h6>
             <div class="media text-muted pt-3" v-for="list in list" v-bind:key="list.id" v-bind:id="list.id">
-
-
               <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
                 <div class="d-flex justify-content-between align-items-center w-100">
                   <nuxt-link :to="'user-profile/' + list.id">
@@ -28,7 +26,8 @@
             <div class="lh-100">
               <h6 class="mb-0 text-white lh-100">{{full_name}}</h6>
               <small class="u-font">@{{user_name}}</small><br>
-              <small class="u-font">{{about_me}}</small><br />
+              <small class="u-font">{{about_me}}</small><br>
+              <small>Joined: {{join_date}}</small><br>
               <small>Following <span class="badge badge-secondary">{{this.followersCount}}</span></small>
               <small> Followers <span class="badge badge-secondary">{{this.followingcount}}</span></small>
             </div>
@@ -45,7 +44,7 @@
                         <p class="text-danger"> {{ errors_msg }}</p>
                       </div>
                     </div>
-                    <input type="submit" value="Post" class="btn btn-dark button">
+                    <input type="submit" value="Murmur" class="btn btn-dark button">
                   </form>
                 </div>
               </div>
@@ -60,15 +59,19 @@
                 <nuxt-link :to="'user-profile/' + timeline_murmur.user_id">
 
                   <strong class="d-block text-gray-dark"> {{timeline_murmur.full_name}}
-                    @{{timeline_murmur.user_name}}</strong>
+                    @{{timeline_murmur.user_name}}</strong> 
                 </nuxt-link>
                 <nuxt-link :to="'murmur-detail/' + timeline_murmur.id">
                   {{timeline_murmur.murmur_content.substring(0,100)+".."}}.
                 </nuxt-link>
+                 <br>
+                <small class="text-primary">Posted: {{new Date(timeline_murmur.creation_date).toLocaleDateString("en-US")}}</small> 
+                <strong><span class="badge badge-dark" @click="likePost(timeline_murmur.id)">Like</span> <span
+                  class="badge badge-secondary">{{timeline_murmur.like_count}}</span></strong>
               </p>
+              <br>
 
-              <h6><span class="badge badge-dark" @click="likePost(timeline_murmur.id)">Like</span> <span
-                  class="badge badge-secondary">{{timeline_murmur.like_count}}</span></h6>
+
             </div>
             <small class="d-block text-center mt-3" v-if="timeline_murmur.length>0">
               <button type="button" class="btn btn-secondary btn-sm" @click="previousPage()"
@@ -152,7 +155,9 @@
         page: 1,
         next_status_disable: '',
         disable: '',
-        user_followers:[]
+        user_followers:[],
+       
+    
       }
     },
     async created() {
@@ -180,6 +185,7 @@
         this.disable = false
 
       } catch (err) {}
+
       try {
         const resUser = await axios.get('http://localhost:3001/api/user/' + this.userId)
 
@@ -188,8 +194,7 @@
         this.user_name = this.user.user_name,
           this.full_name = this.user.full_name,
           this.about_me = this.user.about_me,
-          this.join_date = this.user.join_date
-
+          this.join_date = new Date(this.user.join_date).toLocaleDateString("en-US")
       } catch (err) {
 
       }
