@@ -101,3 +101,24 @@ exports.getFollowing = (req, res) => {
 
 }
 
+exports.getFollower = (req, res) => {
+  console.log(req.params.userId);
+
+    console.log("Find Followers by user ID");
+    
+    Follower.getFollower(req.params.userId, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found Follower with id ${req.params.userId}.`
+          });
+        } else {
+          res.status(500).send({
+            message: "Error retrieving Follower with id " + req.params.userId
+          });
+        }
+      } else res.send(data);
+    });
+
+}
+

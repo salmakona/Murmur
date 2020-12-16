@@ -1,24 +1,93 @@
 <template>
-  <div>
-       <div class="card">
-                           <img src="/iconfinder_user-alt_285645.png" width="50" height="50" />
-  {{murmur.full_name}}
-  <p>
-  {{murmur.user_name}}
-  </p>
+<div>
+ <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Suggestions</h6>
+            <div class="media text-muted pt-3" v-for="list in list" v-bind:key="list.id" v-bind:id="list.id">
 
-      <div class="card-body">
-        <div class="card">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                {{murmur.murmur_content}}
-              </li>
-            <h6><span class="badge badge-dark" @click="likePost(murmur.id)">Like</span> <span
-                class="badge badge-secondary">{{murmur.like_count}}</span></h6>
-          </ul>
+
+              <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <nuxt-link :to="'/user-profile/' + list.id">
+                    <img src="/iconfinder_user-alt_285645.png" width="48" height="48" />
+                    <strong class="text-gray-dark">{{list.full_name}}</strong>
+                  </nuxt-link>
+                  <a href="#" @click="follow(list.id)">Follow</a>
+                </div>
+                <strong v-if="error_follower">{{this.errorMessage_follwer}}</strong>
+              </div>
+            </div>
+          </div> 
+
+        </div>
+        <div class="col-md-6 border-right border-left">
+          <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+            <img src="/iconfinder_user-alt_285645.png" width="48" height="48" />
+            <div class="lh-100">
+              <h6 class="mb-0 text-white lh-100">{{full_name}}</h6>
+              <small class="u-font">@{{user_name}}</small><br>
+              <small class="u-font">{{about_me}}</small><br />
+              <small>Following <span class="badge badge-secondary">{{this.followersCount}}</span></small>
+              <small> Followers <span class="badge badge-secondary">{{this.followingcount}}</span></small>
+            </div>
+          </div>
+          <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Recent Murmur</h6>
+            <div class="media text-muted pt-3">
+              <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+                  {{murmur.murmur_content}}.
+              </p>
+              <h6><span class="badge badge-dark" @click="likePost(murmur.id)">Like</span> <span
+                  class="badge badge-secondary">{{murmur.like_count}}</span></h6>
+            </div>
+    
+          </div>
+        </div>
+        <div class="col-md-3">
+
+           <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Following</h6>
+            <div class="media text-muted pt-3" v-for="following in following" v-bind:key="following.id"
+              v-bind:id="following.id">
+              <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <nuxt-link :to="'/user-profile/' + following.id">
+                    <img src="/iconfinder_user-alt_285645.png" width="48" height="48" />
+                    <strong class="text-gray-dark">{{following.full_name}}</strong>
+                  </nuxt-link>
+                  <a href="#" @click="follow(following.id)">Unfollow</a>
+                </div>
+                <strong v-if="error">{{this.errorMessage}}</strong>
+              </div>
+
+
+            </div>
+          </div>
+
+          <div class="my-3 p-3 bg-white rounded box-shadow">
+            <h6 class="border-bottom border-gray pb-2 mb-0">Followers</h6>
+            <div class="media text-muted pt-3" v-for="user_followers in user_followers" v-bind:key="user_followers.id"
+              v-bind:id="user_followers.id">
+              <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <nuxt-link :to="'/user-profile/' + user_followers.id">
+                    <img src="/iconfinder_user-alt_285645.png" width="48" height="48" />
+                    <strong class="text-gray-dark">{{user_followers.full_name}}</strong>
+                  </nuxt-link>
+                </div>
+              </div>
+
+
+            </div>
+          </div>  
         </div>
       </div>
     </div>
+
   </div>
 </template>
 <script>
@@ -28,7 +97,16 @@
     data() {
       return {
         murmur: [],
-        userId:1
+        userId:'',
+        user_name: '',
+        full_name: '',
+        about_me: '',
+        join_date: '',
+         followersCount: [],
+        followingcount: [],
+         user_followers: [],
+          following: [],
+           list: []
       }
     },
     mounted() {
@@ -40,8 +118,75 @@
       try {
         const resAll = await axios.get('http://localhost:3001/api/murmurs/murmurId/' + this.$route.params.id);
         this.murmur = resAll.data[0]
+        this.userId=this.murmur.user_id
 
       } catch (err) {}
+      try {
+        const resuser = await axios.get('http://localhost:3001/api/user/' + this.userId)
+
+        this.user = resuser.data[0]
+        console.log(this.user)
+        this.user_name = this.user.user_name,
+          this.full_name = this.user.full_name,
+          this.about_me = this.user.about_me,
+          this.join_date = this.user.join_date
+
+      } catch (err) {
+
+      }
+         try {
+
+        const resfollowerCount = await axios.get('http://localhost:3001/api/followerCount/' + this.userId);
+        this.followersCount = resfollowerCount.data.count
+
+      } catch (err) {
+
+      }
+
+      try {
+        const resfollowedBYCount = await axios.get('http://localhost:3001/api/followingCount/' + this.userId);
+        this.followingcount = resfollowedBYCount.data.count
+
+      } catch (err) {
+
+      }
+
+       try {
+
+        const userFollowers = await axios.get('http://localhost:3001/api/follower/' + this.userId);
+        this.user_followers = userFollowers.data;
+      } catch (e) {
+
+      }
+
+       //getFollowing users
+      try {
+        const resFollowing = await axios.get('http://localhost:3001/api/following/' + this.userId);
+        this.following = resFollowing.data;
+        this.error = false
+        this.errorMessage = "";
+
+      } catch (err) {
+
+        this.error = true
+        this.errorMessage = "user not exits...";
+        this.following = [];
+      }
+
+      try {
+
+        const list = await axios.get('http://localhost:3001/api/user/notfollowing/' + this.userId)
+        this.list = list.data;
+        console.log(this.list)
+        this.error_follower = false
+        this.errorMessage_follwer = "";
+
+      } catch (err) {
+        this.error_follower = true
+        this.errorMessage_follwer = "user not exits...";
+        this.list = [];
+        console.log(err)
+      }
 
 
     },
@@ -67,6 +212,78 @@
         this.murmur = resAll.data[0]
 
       } catch (err) {}
+      },
+       async follow(followId) {
+        console.log("follower_user_id: " + followId + "user_id: " + this.userId)
+        const res = await axios.post('http://localhost:3001/api/follower', {
+          user_id: this.userId,
+          follower_user_id: followId
+        }).then((response) => {
+          console.log(response);
+          this.followerReload();
+          this.followingReload();
+          this.refresh();
+          this.reloadFollowerCount();
+          this.reloadFollowingCount()
+        });
+
+      },     async followerReload() {
+        // refload following list
+        try {
+
+          const list = await axios.get('http://localhost:3001/api/user/notfollowing/' + this.userId);
+          this.list = list.data;
+
+          console.log(this.list);
+          this.error_follower = false
+          this.errorMessage_follwer = "";
+
+        } catch (err) {
+
+          this.error_follower = true
+          this.errorMessage_follwer = "user not exits...";
+          this.list = [];
+
+        }
+
+      },
+
+      async followingReload() {
+        // get following list
+        try {
+          const resFollowing = await axios.get('http://localhost:3001/api/following/' + this.userId);
+
+          this.following = resFollowing.data
+          this.error = false
+          this.errorMessage = "";
+        } catch (err) {
+
+          this.error = true
+          this.errorMessage = "user not exits...";
+          this.following = [];
+        }
+      },
+      async reloadFollowerCount() {
+        try {
+
+          const resFollowerCount = await axios.get('http://localhost:3001/api/followerCount/' + this.userId);
+          console.log("Folowed count")
+          this.followersCount = resFollowerCount.data.count
+
+        } catch (err) {
+
+        }
+      },
+      async reloadFollowingCount() {
+        try {
+          const resFollowedBYCount = await axios.get('http://localhost:3001/api/followingCount/' + this.userId);
+          console.log("Followingcount" + resFollowedBYCount.data)
+
+          this.followingcount = resFollowedBYCount.data.count
+
+        } catch (err) {
+
+        }
       }
     }
 

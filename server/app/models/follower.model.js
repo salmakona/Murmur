@@ -172,5 +172,30 @@ Follower.create = (newFollower, result) => {
   }
 
 
+  Follower.getFollower = (userId,result) =>{
+
+    console.log(userId)
+    sql.query(`SELECT * FROM users WHERE id IN (select follower_user_id from followers where user_id = ${userId})`, (err, res) => {
+
+      console.log(res)
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        console.log("found followers: ", res);
+        result(null, res);
+        return;
+      }
+
+      // not found Murmur with the id
+      result({ kind: "not_found" }, null);
+    });
+
+  }
+
+
 
 module.exports = Follower;
