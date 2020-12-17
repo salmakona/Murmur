@@ -1,7 +1,5 @@
 export default {
-  // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
-  ssr: true,
-
+  
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: '%s - goandup-test-for-venturas',
@@ -15,10 +13,12 @@ export default {
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [],
+  css: [
+  ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: [
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -31,24 +31,11 @@ export default {
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    '@nuxtjs/proxy',
+    // https://go.nuxtjs.dev/bootstrap
+    'bootstrap-vue/nuxt',
   ],
 
-  // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {
-    proxy: true,
-  },
-  proxy: {
-    '/api/postTest': {
-      // ターゲット先のURLを指定
-      target: 'http://localhost:3001',
-      changeOrigin: true,
-      secure: false,
-    },
-  },
-
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {},
+  build: {
+  }
 }
