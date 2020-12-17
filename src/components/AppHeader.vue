@@ -7,7 +7,7 @@
         <nuxt-link to="/">Home</nuxt-link>
       </li>
       <li>
-        <nuxt-link to="/profile">Profile</nuxt-link>
+        <nuxt-link to="/user-profile/1">Profile</nuxt-link>
       </li>
     </ul>
   </header>
