@@ -15,6 +15,7 @@ Table added based on spefication
 
 ### Server
  Implemented REST API.
+ 
 
 
 ### Client
@@ -32,3 +33,14 @@ Table added based on spefication
  * Other User Detail
    * User information (e.g. name, followCount, followedCount)
    * List of the user's tweet
+   
+##### development environment: 
+
+Programming Language
+* Javascript
+Server: Express js 
+DB: mysql 
+Client: Vue js framework Nuxt js
+
+   
+   
